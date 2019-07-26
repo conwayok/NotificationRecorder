@@ -28,25 +28,55 @@ import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
 
-  private TableLayout tab;
+  private TableLayout tableLayout;
+
   private Button clearButton;
+
+  //  private RecyclerView recyclerView;
+  //  private RecyclerView.Adapter adapter;
+  //  private RecyclerView.LayoutManager layoutManager;
+
   private static final String TAG = "MainActivity";
   private ObjectMapper objectMapper;
+
+  //  private List<NotificationModel> notificationModels;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    tab = findViewById(R.id.tab);
+
+    tableLayout = findViewById(R.id.table_layout);
+
+    //    recyclerView = findViewById(R.id.main_recycler_view);
+    //    recyclerView.setHasFixedSize(true);
+    // use a linear layout manager
+    //    layoutManager = new LinearLayoutManager(this);
+    //    recyclerView.setLayoutManager(layoutManager);
+    //    notificationModels = new ArrayList<>();
+    //
+    //    NotificationModel notificationModel = new NotificationModel();
+    //    notificationModel.setAppName("app 1");
+    //    notificationModel.setPackageName("qwerqwerf");
+    //    notificationModel.setText("qwerwfssdfasdfww");
+    //    notificationModel.setTitle("title");
+    //    notificationModel.setTime("time");
+    //    notificationModels.add(notificationModel);
+
+    //    adapter = new NotificationAdapter(notificationModels);
+    //    recyclerView.setAdapter(adapter);
+
     clearButton = findViewById(R.id.clear_btn);
 
     clearButton.setOnClickListener(
         v -> {
           getSharedPreferences(Config.SHARED_PREF_NAME, MODE_PRIVATE).edit().clear().apply();
-          tab.removeAllViews();
+          //          recyclerView.removeAllViews();
+          tableLayout.removeAllViews();
         });
 
     objectMapper = new ObjectMapper();
+
     LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
 
     ComponentName cn =
@@ -60,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
       startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));
     }
 
-    tab.removeAllViews();
+    //    recyclerView.removeAllViews();
+    tableLayout.removeAllViews();
     loadContent();
   }
 
@@ -75,17 +106,17 @@ public class MainActivity extends AppCompatActivity {
 
   private void loadContent() {
 
-    tab.removeAllViews();
+    tableLayout.removeAllViews();
 
     Map<String, ?> allEntries =
         getSharedPreferences(Config.SHARED_PREF_NAME, MODE_PRIVATE).getAll();
 
-    List<MessageModel> messageModels =
+    List<NotificationModel> notificationModels =
         allEntries.values().stream()
             .map(
                 v -> {
                   try {
-                    return objectMapper.readValue((String) v, MessageModel.class);
+                    return objectMapper.readValue((String) v, NotificationModel.class);
                   } catch (IOException e) {
                     Log.e(TAG, e.getMessage());
                     e.printStackTrace();
@@ -95,17 +126,16 @@ public class MainActivity extends AppCompatActivity {
             // filter out null
             .filter(Objects::nonNull)
             // sort
-            .sorted(Comparator.comparingLong(MessageModel::getEpochSecond))
+            .sorted(Comparator.comparingLong(NotificationModel::getEpochSecond))
             .collect(Collectors.toList());
 
-    messageModels.forEach(
-        messageModel -> {
-          String pack = messageModel.getPackageName();
-          String title = messageModel.getTitle();
-          String text = messageModel.getText();
-          String time = messageModel.getTime();
-          TableRow tr = new TableRow(getApplicationContext());
-          tr.setLayoutParams(
+    notificationModels.forEach(
+        notificationModel -> {
+          TableRow tableRow = new TableRow(getApplicationContext());
+
+          tableRow.setPadding(0, 10, 0, 10);
+
+          tableRow.setLayoutParams(
               new TableRow.LayoutParams(
                   TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
           TextView textview = new TextView(getApplicationContext());
@@ -115,11 +145,30 @@ public class MainActivity extends AppCompatActivity {
           textview.setTextSize(16);
           textview.setTextColor(Color.parseColor("#0B0719"));
           textview.setText(
-              Html.fromHtml(
-                  pack + "<br><b>" + title + " : </b>" + text + " " + time,
-                  Html.FROM_HTML_MODE_LEGACY));
-          tr.addView(textview);
-          tab.addView(tr);
+              Html.fromHtml(generatePrettyHtml(notificationModel), Html.FROM_HTML_MODE_LEGACY));
+          tableRow.addView(textview);
+
+          tableLayout.addView(tableRow);
         });
+  }
+
+  private String generatePrettyHtml(NotificationModel notificationModel) {
+    String appName = notificationModel.getAppName();
+    String title = notificationModel.getTitle();
+    String text = notificationModel.getText();
+    String time = notificationModel.getTime();
+
+    String appNameText = "<b><big>" + appName + "</b>";
+    String titleText = "<b>" + title + ": </b>";
+
+    if (appName.equals("LINE")) {
+      appNameText = "<font color='green'>" + appNameText + "</font>";
+    } else if (appName.equals("FACEBOOK")) {
+      appNameText = "<font color='blue'>" + appNameText + "</font>";
+    } else {
+      appNameText = appName;
+    }
+
+    return appNameText + "<br>" + titleText + text + "<br>" + time;
   }
 }

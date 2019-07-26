@@ -36,13 +36,13 @@ public class CustomNotificationListenerService extends NotificationListenerServi
 
   @Override
   public void onNotificationPosted(StatusBarNotification sbn) {
-    String pack = sbn.getPackageName();
+    String packageName = sbn.getPackageName();
     //    String ticker = sbn.getNotification().tickerText.toString();
     Bundle extras = sbn.getNotification().extras;
     try {
       String title = extras.getCharSequence(Notification.EXTRA_TITLE).toString();
       String text = extras.getCharSequence(Notification.EXTRA_TEXT).toString();
-      Log.i(TAG, "Package " + pack);
+      Log.i(TAG, "Package " + packageName);
       Log.i(TAG, "Title " + title);
       Log.i(TAG, "Text " + text);
 
@@ -50,18 +50,29 @@ public class CustomNotificationListenerService extends NotificationListenerServi
       String timeString = current.toString();
       long second = current.atZone(Clock.systemDefaultZone().getZone()).toEpochSecond();
 
-      MessageModel messageModel = new MessageModel();
-      messageModel.setPackageName(pack);
-      messageModel.setTitle(title);
-      messageModel.setText(text);
-      messageModel.setTime(timeString);
-      messageModel.setEpochSecond(second);
-      String json = objectMapper.writeValueAsString(messageModel);
+      NotificationModel notificationModel = new NotificationModel();
+      notificationModel.setPackageName(packageName);
+
+      if (packageName.equals("jp.naver.line.android")) {
+        notificationModel.setAppName("LINE");
+      } else if (packageName.equals("com.facebook.katana")) {
+        notificationModel.setAppName("FACEBOOK");
+      } else {
+        notificationModel.setAppName(packageName);
+      }
+
+      notificationModel.setTitle(title);
+      notificationModel.setText(text);
+      notificationModel.setTime(timeString);
+      notificationModel.setEpochSecond(second);
+      String json = objectMapper.writeValueAsString(notificationModel);
       SharedPreferences.Editor editor =
           getSharedPreferences(Config.SHARED_PREF_NAME, MODE_PRIVATE).edit();
-      editor.putString(pack + " " + timeString, json);
+      editor.putString(packageName + " " + timeString, json);
       editor.apply();
       Intent intent = new Intent("Msg");
+      intent.putExtra("payload", json);
+
       LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     } catch (NullPointerException | JsonProcessingException e) {
       //      e.printStackTrace();
