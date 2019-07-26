@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="5dp"
+    card_view:cardCornerRadius="2dp">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+
+        <TextView
+            android:id="@+id/notification_app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="App name"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/notification_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/notification_app_name" />
+
+        <TextView
+            android:id="@+id/notification_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Content"
+            card_view:layout_constraintStart_toEndOf="@+id/notification_title"
+            card_view:layout_constraintTop_toBottomOf="@+id/notification_app_name" />
+
+        <TextView
+            android:id="@+id/notification_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="time"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/notification_title" />
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>
