@@ -32,14 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
   private Button clearButton;
 
-  //  private RecyclerView recyclerView;
-  //  private RecyclerView.Adapter adapter;
-  //  private RecyclerView.LayoutManager layoutManager;
-
   private static final String TAG = "MainActivity";
   private ObjectMapper objectMapper;
-
-  //  private List<NotificationModel> notificationModels;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -48,30 +42,11 @@ public class MainActivity extends AppCompatActivity {
 
     tableLayout = findViewById(R.id.table_layout);
 
-    //    recyclerView = findViewById(R.id.main_recycler_view);
-    //    recyclerView.setHasFixedSize(true);
-    // use a linear layout manager
-    //    layoutManager = new LinearLayoutManager(this);
-    //    recyclerView.setLayoutManager(layoutManager);
-    //    notificationModels = new ArrayList<>();
-    //
-    //    NotificationModel notificationModel = new NotificationModel();
-    //    notificationModel.setAppName("app 1");
-    //    notificationModel.setPackageName("qwerqwerf");
-    //    notificationModel.setText("qwerwfssdfasdfww");
-    //    notificationModel.setTitle("title");
-    //    notificationModel.setTime("time");
-    //    notificationModels.add(notificationModel);
-
-    //    adapter = new NotificationAdapter(notificationModels);
-    //    recyclerView.setAdapter(adapter);
-
     clearButton = findViewById(R.id.clear_btn);
 
     clearButton.setOnClickListener(
         v -> {
           getSharedPreferences(Config.SHARED_PREF_NAME, MODE_PRIVATE).edit().clear().apply();
-          //          recyclerView.removeAllViews();
           tableLayout.removeAllViews();
         });
 
@@ -90,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
       startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));
     }
 
-    //    recyclerView.removeAllViews();
     tableLayout.removeAllViews();
     loadContent();
   }
@@ -161,12 +135,20 @@ public class MainActivity extends AppCompatActivity {
     String appNameText = "<b><big>" + appName + "</b>";
     String titleText = "<b>" + title + ": </b>";
 
-    if (appName.equals("LINE")) {
-      appNameText = "<font color='green'>" + appNameText + "</font>";
-    } else if (appName.equals("FACEBOOK")) {
-      appNameText = "<font color='blue'>" + appNameText + "</font>";
-    } else {
-      appNameText = appName;
+    switch (appName) {
+      case "LINE":
+      case "WHATSAPP":
+        appNameText = "<font color='#008000'>" + appNameText + "</font>";
+        break;
+      case "FACEBOOK":
+        appNameText = "<font color='#0000FF'>" + appNameText + "</font>";
+        break;
+      case "INSTAGRAM":
+        appNameText = "<font color='#FE4164'>" + appNameText + "</font>";
+        break;
+      default:
+        appNameText = appName;
+        break;
     }
 
     return appNameText + "<br>" + titleText + text + "<br>" + time;
