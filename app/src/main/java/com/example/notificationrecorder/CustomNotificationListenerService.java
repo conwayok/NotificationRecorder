@@ -22,8 +22,8 @@ public class CustomNotificationListenerService extends NotificationListenerServi
 
   private static final String LINE_PACKAGE = "jp.naver.line.android";
   private static final String FACEBOOK_PACKAGE = "com.facebook";
-  private static final String WHATSAPP_PACKAGE = "com.whatsapp";
-  private static final String INSTAGRAM_PACKAGE = "com.instagram";
+  //  private static final String WHATSAPP_PACKAGE = "com.whatsapp";
+  //  private static final String INSTAGRAM_PACKAGE = "com.instagram";
 
   private Context context;
   private ObjectMapper objectMapper;
@@ -44,10 +44,10 @@ public class CustomNotificationListenerService extends NotificationListenerServi
   public void onNotificationPosted(StatusBarNotification sbn) {
     String packageName = sbn.getPackageName();
 
-    if (packageName.contains(FACEBOOK_PACKAGE)
-        || packageName.contains(LINE_PACKAGE)
-        || packageName.contains(WHATSAPP_PACKAGE)
-        || packageName.contains(INSTAGRAM_PACKAGE)) {
+    if (packageName.contains(FACEBOOK_PACKAGE) || packageName.contains(LINE_PACKAGE)
+    //        || packageName.contains(WHATSAPP_PACKAGE)
+    //        || packageName.contains(INSTAGRAM_PACKAGE)
+    ) {
       Bundle extras = sbn.getNotification().extras;
       try {
         String title = extras.getCharSequence(Notification.EXTRA_TITLE).toString();
@@ -70,12 +70,12 @@ public class CustomNotificationListenerService extends NotificationListenerServi
           case FACEBOOK_PACKAGE:
             notificationModel.setAppName("FACEBOOK");
             break;
-          case WHATSAPP_PACKAGE:
-            notificationModel.setAppName("WHATSAPP");
-            break;
-          case INSTAGRAM_PACKAGE:
-            notificationModel.setAppName("INSTAGRAM");
-            break;
+            //          case WHATSAPP_PACKAGE:
+            //            notificationModel.setAppName("WHATSAPP");
+            //            break;
+            //          case INSTAGRAM_PACKAGE:
+            //            notificationModel.setAppName("INSTAGRAM");
+            //            break;
           default:
             break;
         }

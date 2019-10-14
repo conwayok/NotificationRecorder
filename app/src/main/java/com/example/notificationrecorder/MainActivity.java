@@ -137,15 +137,15 @@ public class MainActivity extends AppCompatActivity {
 
     switch (appName) {
       case "LINE":
-      case "WHATSAPP":
+        //      case "WHATSAPP":
         appNameText = "<font color='#008000'>" + appNameText + "</font>";
         break;
       case "FACEBOOK":
         appNameText = "<font color='#0000FF'>" + appNameText + "</font>";
         break;
-      case "INSTAGRAM":
-        appNameText = "<font color='#FE4164'>" + appNameText + "</font>";
-        break;
+        //      case "INSTAGRAM":
+        //        appNameText = "<font color='#FE4164'>" + appNameText + "</font>";
+        //        break;
       default:
         appNameText = appName;
         break;
