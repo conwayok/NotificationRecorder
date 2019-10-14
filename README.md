@@ -1,2 +1,2 @@
 # NotificationRecorder
-Read all incoming notifications on Android and display.
+Read incoming notifications on Android and display.

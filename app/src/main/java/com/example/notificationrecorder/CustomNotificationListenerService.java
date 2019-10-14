@@ -22,8 +22,6 @@ public class CustomNotificationListenerService extends NotificationListenerServi
 
   private static final String LINE_PACKAGE = "jp.naver.line.android";
   private static final String FACEBOOK_PACKAGE = "com.facebook";
-  //  private static final String WHATSAPP_PACKAGE = "com.whatsapp";
-  //  private static final String INSTAGRAM_PACKAGE = "com.instagram";
 
   private Context context;
   private ObjectMapper objectMapper;
