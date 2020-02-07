@@ -142,6 +142,9 @@ public class MainActivity extends AppCompatActivity {
       case "FACEBOOK":
         appNameText = "<font color='#0000FF'>" + appNameText + "</font>";
         break;
+        case "INSTAGRAM":
+            appNameText =  "<font color='#FB3958'>" + appNameText + "</font>";
+            break;
       default:
         appNameText = appName;
         break;
