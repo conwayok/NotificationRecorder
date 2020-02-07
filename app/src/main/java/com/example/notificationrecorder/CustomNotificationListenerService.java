@@ -22,6 +22,7 @@ public class CustomNotificationListenerService extends NotificationListenerServi
 
   private static final String LINE_PACKAGE = "jp.naver.line.android";
   private static final String FACEBOOK_PACKAGE = "com.facebook";
+  private static final String INSTAGRAM_PACKAGE = "com.instagram";
 
   private Context context;
   private ObjectMapper objectMapper;
@@ -41,13 +42,16 @@ public class CustomNotificationListenerService extends NotificationListenerServi
   @Override
   public void onNotificationPosted(StatusBarNotification sbn) {
     String packageName = sbn.getPackageName();
+    Log.i(TAG, "Package " + packageName);
 
-    if (packageName.contains(FACEBOOK_PACKAGE) || packageName.contains(LINE_PACKAGE)) {
+    if (packageName.contains(FACEBOOK_PACKAGE)
+        || packageName.contains(LINE_PACKAGE)
+        || packageName.contains(INSTAGRAM_PACKAGE)) {
       Bundle extras = sbn.getNotification().extras;
       try {
         String title = extras.getCharSequence(Notification.EXTRA_TITLE).toString();
         String text = extras.getCharSequence(Notification.EXTRA_TEXT).toString();
-        Log.i(TAG, "Package " + packageName);
+
         Log.i(TAG, "Title " + title);
         Log.i(TAG, "Text " + text);
 
@@ -60,6 +64,7 @@ public class CustomNotificationListenerService extends NotificationListenerServi
 
         if (packageName.contains(LINE_PACKAGE)) notificationModel.setAppName("LINE");
         else if (packageName.contains(FACEBOOK_PACKAGE)) notificationModel.setAppName("FACEBOOK");
+        else if (packageName.contains(INSTAGRAM_PACKAGE)) notificationModel.setAppName("INSTAGRAM");
 
         notificationModel.setTitle(title);
         notificationModel.setText(text);
